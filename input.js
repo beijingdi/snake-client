@@ -1,32 +1,41 @@
-const setupInput = () => {
+const { connect } = require('./client');
+let connection;
+
+
+const setupInput = (conn) => {
+  connection = conn;
   const stdin = process.stdin;
   stdin.setRawMode(true);
   stdin.setEncoding("utf8");
   stdin.resume();
-  const handleUserInput = function () {
-    process.stdin.on = function(key) {
-      if (key === "w") {
-        process.stdout.write('Move: up');
-      }
-      if (key ==="a") {
-        process.stdout.write("Move: left");
-      }
-      if (key === "s") {
-        process.stdout.write("Move down");
-      }
-      if (key === "d") {
-        process.stdout.write("Move: right");
-      }
-      if (key) {
-        console.log(key)
-      }
-      if (key === '\u0003') {
-        process.exit();
-      }
-    }// your code here
-  };
   stdin.on("data",handleUserInput);
   return stdin;
+};
+
+
+const handleUserInput = function (key) {
+    if (key === "w") {
+      connection.write('Move: up');
+      console.log("moving up!")
+    }
+    if (key ==="a") {
+      connection.write("Move: left");
+      console.log("moving left!");
+    }
+    if (key === "s") {
+      connection.write("Move: down");
+      console.log("moving down!");
+    }
+    if (key === "d") {
+      connection.write("Move: right");
+      console.log("Moving right")
+    }
+    if (key === '\u0003') {
+      process.exit();
+    }
+    if (key === "f") {
+      connection.write("Say: uwu");
+    }
 };
 
 module.exports = {setupInput};
